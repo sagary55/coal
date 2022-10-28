@@ -22,9 +22,9 @@ resource "aws_launch_configuration" "HitachiPROD" {
 }
 resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 2
-  desired_capacity     = 2
-  max_size             = 2
+  min_size             = 0
+  desired_capacity     = 0
+  max_size             = 0
 
   health_check_type    = "EC2"
   launch_configuration = aws_launch_configuration.HitachiPROD.name
