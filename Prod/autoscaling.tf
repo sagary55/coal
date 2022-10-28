@@ -5,7 +5,7 @@ resource "aws_launch_configuration" "HitachiPROD" {
   #name_prefix = "Hitachi-PROD"
    name = "Hitachi-PRODLC"
   image_id = "ami-06640050dc3f556bb" # Amazon Linux 2 AMI (HVM), SSD Volume Type
-  instance_type = "t3.small"
+  instance_type = "t3a.small"
   iam_instance_profile = "ssm"
   key_name = "coalindia1"
   #security_groups = ["sg-0f26eebf1b3476c10"]
