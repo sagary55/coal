@@ -1,7 +1,7 @@
 provider "aws" {
 region = "us-east-1"
 }
-resource "aws_launch_configuration" "HitachiPROD" {
+resource "aws_launch_configuration" "Hitachi-PROD" {
   #name_prefix = "Hitachi-PROD"
    name = "Hitachi-PRODLC"
   image_id = "ami-06640050dc3f556bb" # Amazon Linux 2 AMI (HVM), SSD Volume Type
@@ -27,7 +27,7 @@ resource "aws_autoscaling_group" "Hitachi-PROD" {
   max_size             = 1
 
   health_check_type    = "EC2"
-  launch_configuration = aws_launch_configuration.HitachiPROD.name
+  launch_configuration = aws_launch_configuration.Hitachi-PROD.name
   # target_group_arns = [aws_lb_target_group.Hitachi-PROD-tg.arn]
 
   enabled_metrics = [
