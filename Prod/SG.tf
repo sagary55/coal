@@ -1,6 +1,6 @@
-resource "aws_security_group" "Hitachi-DEV" {
-  name        = "Hitachi-DEV"
-  description = "Hitachi-DEV"
+resource "aws_security_group" "Hitachi-PROD" {
+  name        = "Hitachi-PROD"
+  description = "Hitachi-PROD"
   vpc_id      = "${aws_vpc.hitachi_vpc.id}"
 
   ingress {
@@ -11,6 +11,14 @@ resource "aws_security_group" "Hitachi-DEV" {
   description      = "internal VPC"
   }
 
+
+  ingress {
+    from_port        = 8080
+    to_port          = 8080
+    protocol         = "tcp"
+	cidr_blocks      = ["0.0.0.0/0"]
+  description      = "internal VPC"
+  }
   ingress {
     from_port        = 80
     to_port          = 80
@@ -27,10 +35,10 @@ resource "aws_security_group" "Hitachi-DEV" {
   }
 
   tags = {
-    Name = "Hitachi-DEV"
-Environment = "DEV"
+    Name = "Hitachi-PROD"
+Environment = "PROD"
 Application_Owner = "Hitachi"
-Cost_Center = "DEV"
+Cost_Center = "Production"
 Application_Name = "Web"
 Partner_Name = "ACC"
 Department = "Infra"

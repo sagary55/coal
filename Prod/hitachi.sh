@@ -4,8 +4,8 @@
               yum install httpd -y
               systemctl start httpd
               systemctl enable httpd
-              echo 'Hello World this is DEV' >> /var/www/html/index.html
+              echo 'Hello World' >> /var/www/html/index.html
               sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-              #sed -i 's/Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf
+              sed -i 's/Listen 80/Listen 8080/g' /etc/httpd/conf/httpd.conf
               systemctl restart httpd
               systemctl restart sshd

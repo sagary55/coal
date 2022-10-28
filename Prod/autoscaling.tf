@@ -1,15 +1,15 @@
 provider "aws" {
 region = "us-east-1"
 }
-resource "aws_launch_configuration" "Hitachi-DEV" {
-  #name_prefix = "Hitachi-DEV"
-   name = "Hitachi-DEV-LC"
+resource "aws_launch_configuration" "Hitachi-PROD" {
+  #name_prefix = "Hitachi-PROD"
+   name = "Hitachi-PROD-LC"
   image_id = "ami-06640050dc3f556bb" # Amazon Linux 2 AMI (HVM), SSD Volume Type
   instance_type = "t3a.micro"
   iam_instance_profile = "ssm"
   key_name = "coalindia1"
   #security_groups = ["sg-0f26eebf1b3476c10"]
-  security_groups = [aws_security_group.Hitachi-DEV.id]
+  security_groups = [aws_security_group.Hitachi-PROD.id]
     root_block_device {
     #device_name = "/dev/xvdb"
     volume_type = "gp3"
@@ -20,15 +20,15 @@ resource "aws_launch_configuration" "Hitachi-DEV" {
   }
    user_data = "${file("hitachi.sh")}"
 }
-resource "aws_autoscaling_group" "Hitachi-DEV" {
-  name = "Hitachi-DEV-ASG"
+resource "aws_autoscaling_group" "Hitachi-PROD" {
+  name = "Hitachi-PROD-ASG"
   min_size             = 2
   desired_capacity     = 2
   max_size             = 2
 
   health_check_type    = "EC2"
-  launch_configuration = aws_launch_configuration.Hitachi-DEV.name
-  # target_group_arns = [aws_lb_target_group.Hitachi-DEV-tg.arn]
+  launch_configuration = aws_launch_configuration.Hitachi-PROD.name
+  # target_group_arns = [aws_lb_target_group.Hitachi-PROD-tg.arn]
 
   enabled_metrics = [
     "GroupMinSize",
@@ -54,12 +54,12 @@ resource "aws_autoscaling_group" "Hitachi-DEV" {
 tags = [
   {
     "key" = "Name"
-    "value" = "Hitachi-DEV"
+    "value" = "Hitachi-PROD"
     "propagate_at_launch" = true
   },
   {
     "key" = "Environment"
-    "value" = "DEV"
+    "value" = "PROD"
     "propagate_at_launch" = true
 	},
 	{
@@ -69,7 +69,7 @@ tags = [
 	},
 	{
     "key" = "Cost Center"
-    "value" = "DEVuction"
+    "value" = "Production"
     "propagate_at_launch" = true
 	},
 	{
@@ -91,16 +91,16 @@ tags = [
 
 }
 
-resource "aws_autoscaling_policy" "Hitachi-DEV-UAT_Memory_Scale_UP" {
-  name = "Hitachi-DEV-UAT_Memory_Scale_UP"
+resource "aws_autoscaling_policy" "Hitachi-PROD-UAT_Memory_Scale_UP" {
+  name = "Hitachi-PROD-UAT_Memory_Scale_UP"
   scaling_adjustment = 1
   adjustment_type = "ChangeInCapacity"
   cooldown = 300
-  autoscaling_group_name = aws_autoscaling_group.Hitachi-DEV.name
+  autoscaling_group_name = aws_autoscaling_group.Hitachi-PROD.name
 }
 
-resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_Memory_alarm_Scale_UP" {
-  alarm_name = "Hitachi-DEV-UAT_Memory_alarm_Scale_UP"
+resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_Memory_alarm_Scale_UP" {
+  alarm_name = "Hitachi-PROD-UAT_Memory_alarm_Scale_UP"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "2"
   metric_name = "MemoryUtilization"
@@ -110,25 +110,25 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_Memory_alarm_Scale_UP" {
   threshold = "80"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.Hitachi-DEV.name
+    AutoScalingGroupName = aws_autoscaling_group.Hitachi-PROD.name
   }
 
   alarm_description = "This metric monitor EC2 instance CPU utilization"
-  alarm_actions = [ aws_autoscaling_policy.Hitachi-DEV-UAT_Memory_Scale_UP.arn ]
+  alarm_actions = [ aws_autoscaling_policy.Hitachi-PROD-UAT_Memory_Scale_UP.arn ]
 }
 
 
 
-resource "aws_autoscaling_policy" "Hitachi-DEV-UAT_CPU_Scale_UP" {
-  name = "Hitachi-DEV-UAT_CPU_Scale_UP"
+resource "aws_autoscaling_policy" "Hitachi-PROD-UAT_CPU_Scale_UP" {
+  name = "Hitachi-PROD-UAT_CPU_Scale_UP"
   scaling_adjustment = 1
   adjustment_type = "ChangeInCapacity"
   cooldown = 300
-  autoscaling_group_name = aws_autoscaling_group.Hitachi-DEV.name
+  autoscaling_group_name = aws_autoscaling_group.Hitachi-PROD.name
 }
 
-resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_CPU_alarm_Scale_UP" {
-  alarm_name = "Hitachi-DEV-UAT_CPU_alarm_Scale_UP"
+resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_CPU_alarm_Scale_UP" {
+  alarm_name = "Hitachi-PROD-UAT_CPU_alarm_Scale_UP"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods = "2"
   metric_name = "CPUUtilization"
@@ -138,23 +138,23 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_CPU_alarm_Scale_UP" {
   threshold = "80"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.Hitachi-DEV.name
+    AutoScalingGroupName = aws_autoscaling_group.Hitachi-PROD.name
   }
 
   alarm_description = "This metric monitor EC2 instance CPU utilization"
-  alarm_actions = [ aws_autoscaling_policy.Hitachi-DEV-UAT_CPU_Scale_UP.arn ]
+  alarm_actions = [ aws_autoscaling_policy.Hitachi-PROD-UAT_CPU_Scale_UP.arn ]
 }
 
-resource "aws_autoscaling_policy" "Hitachi-DEV-UAT_CPU_Scale_DOWN" {
-  name = "Hitachi-DEV-UAT_CPU_Scale_DOWN"
+resource "aws_autoscaling_policy" "Hitachi-PROD-UAT_CPU_Scale_DOWN" {
+  name = "Hitachi-PROD-UAT_CPU_Scale_DOWN"
   scaling_adjustment = -1
   adjustment_type = "ChangeInCapacity"
   cooldown = 300
-  autoscaling_group_name = aws_autoscaling_group.Hitachi-DEV.name
+  autoscaling_group_name = aws_autoscaling_group.Hitachi-PROD.name
 }
 
-resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_CPU_alarm_Scale_DOWN" {
-  alarm_name = "Hitachi-DEV-UAT_CPU_alarm_Scale_DOWN"
+resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_CPU_alarm_Scale_DOWN" {
+  alarm_name = "Hitachi-PROD-UAT_CPU_alarm_Scale_DOWN"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods = "2"
   metric_name = "CPUUtilization"
@@ -164,24 +164,24 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_CPU_alarm_Scale_DOWN" {
   threshold = "30"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.Hitachi-DEV.name
+    AutoScalingGroupName = aws_autoscaling_group.Hitachi-PROD.name
   }
 
   alarm_description = "This metric monitor EC2 instance CPU utilization"
-  alarm_actions = [ aws_autoscaling_policy.Hitachi-DEV-UAT_CPU_Scale_DOWN.arn ]
+  alarm_actions = [ aws_autoscaling_policy.Hitachi-PROD-UAT_CPU_Scale_DOWN.arn ]
 }
 
 
-resource "aws_autoscaling_policy" "Hitachi-DEV-UAT_Memory_Scale_DOWN" {
-  name = "Hitachi-DEV-UAT_Memory_Scale_DOWN"
+resource "aws_autoscaling_policy" "Hitachi-PROD-UAT_Memory_Scale_DOWN" {
+  name = "Hitachi-PROD-UAT_Memory_Scale_DOWN"
   scaling_adjustment = -1
   adjustment_type = "ChangeInCapacity"
   cooldown = 300
-  autoscaling_group_name = aws_autoscaling_group.Hitachi-DEV.name
+  autoscaling_group_name = aws_autoscaling_group.Hitachi-PROD.name
 }
 
-resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_Memory_alarm_Scale_DOWN" {
-  alarm_name = "Hitachi-DEV-UAT_Memory_alarm_Scale_DOWN"
+resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_Memory_alarm_Scale_DOWN" {
+  alarm_name = "Hitachi-PROD-UAT_Memory_alarm_Scale_DOWN"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods = "2"
   metric_name = "MemoryUtilization"
@@ -191,16 +191,16 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-DEV-UAT_Memory_alarm_Scale_DOWN"
   threshold = "30"
 
   dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.Hitachi-DEV.name
+    AutoScalingGroupName = aws_autoscaling_group.Hitachi-PROD.name
   }
 
   alarm_description = "This metric monitor EC2 instance Memory utilization"
-  alarm_actions = [ aws_autoscaling_policy.Hitachi-DEV-UAT_Memory_Scale_DOWN.arn ]
+  alarm_actions = [ aws_autoscaling_policy.Hitachi-PROD-UAT_Memory_Scale_DOWN.arn ]
 }
 
-resource "aws_lb_target_group" "Hitachi-DEV-TG" {
-  name     = "Hitachi-DEV-TG"
-  port     = 80
+resource "aws_lb_target_group" "Hitachi-PROD-TG" {
+  name     = "Hitachi-PROD-TG"
+  port     = 8080
  protocol = "HTTP"
   vpc_id   = "${aws_vpc.hitachi_vpc.id}"
   health_check {
@@ -213,12 +213,12 @@ resource "aws_lb_target_group" "Hitachi-DEV-TG" {
   }
 }
 
-resource "aws_lb" "lb_hitachi-dev" {
+resource "aws_lb" "lb_hitachi" {
   name               = "hitachi-elb"
   internal           = false
   load_balancer_type = "application"
   subnets            = ["${aws_subnet.cidr_public_subnet_a.id}", "${aws_subnet.cidr_public_subnet_b.id}"]
-  security_groups    = ["${aws_security_group.Hitachi-DEV.id}"]
+  security_groups    = ["${aws_security_group.Hitachi-PROD.id}"]
   enable_deletion_protection = false
   tags = {
     Environment = "${var.environment}"
@@ -226,18 +226,18 @@ resource "aws_lb" "lb_hitachi-dev" {
 }
 
 resource "aws_lb_listener" "IB-API" {
-  #listener_arn = "arn:aws:elasticloadbalancing:ap-south-1:476827303802:listener/app/IM-VER-DEV-LB/2687b802eb738bb3/0ce6499695b0b72c"
+  #listener_arn = "arn:aws:elasticloadbalancing:ap-south-1:476827303802:listener/app/IM-VER-PROD-LB/2687b802eb738bb3/0ce6499695b0b72c"
   #priority     = 15
-  load_balancer_arn = "${aws_lb.lb_hitachi-dev.arn}"
+  load_balancer_arn = "${aws_lb.lb_hitachi.arn}"
   port = "80"
   protocol = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.Hitachi-DEV-TG.arn
+    target_group_arn = aws_lb_target_group.Hitachi-PROD-TG.arn
   }
 
 }
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
- autoscaling_group_name = aws_autoscaling_group.Hitachi-DEV.id
- alb_target_group_arn = aws_lb_target_group.Hitachi-DEV-TG.arn
+ autoscaling_group_name = aws_autoscaling_group.Hitachi-PROD.id
+ alb_target_group_arn = aws_lb_target_group.Hitachi-PROD-TG.arn
 }
