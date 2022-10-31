@@ -22,8 +22,8 @@ resource "aws_launch_configuration" "Hitachi-PROD" {
 }
 resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 1
-  desired_capacity     = 1
+  min_size             = 2
+  desired_capacity     = 2
   max_size             = 2
 
   health_check_type    = "EC2"
@@ -200,7 +200,7 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_Memory_alarm_Scale_DOWN
 
 resource "aws_lb_target_group" "Hitachi-PROD-TG" {
   name     = "Hitachi-PROD-TG"
-  port     = 8080
+  port     = 80
  protocol = "HTTP"
   vpc_id   = "${aws_vpc.hitachi_vpc.id}"
   health_check {
@@ -229,7 +229,7 @@ resource "aws_lb_listener" "IB-API" {
   #listener_arn = "arn:aws:elasticloadbalancing:ap-south-1:476827303802:listener/app/IM-VER-PROD-LB/2687b802eb738bb3/0ce6499695b0b72c"
   #priority     = 15
   load_balancer_arn = "${aws_lb.lb_hitachi.arn}"
-  port = "80"
+  port = "8080"
   protocol = "HTTP"
   default_action {
     type             = "forward"
