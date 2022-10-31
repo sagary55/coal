@@ -214,7 +214,7 @@ resource "aws_lb_target_group" "Hitachi-PROD-TG" {
 }
 
 resource "aws_lb" "lb_hitachi" {
-  name               = "hitachi-elb"
+  name               = "hitachi-elb-prod"
   internal           = false
   load_balancer_type = "application"
   subnets            = ["${aws_subnet.cidr_public_subnet_a.id}", "${aws_subnet.cidr_public_subnet_b.id}"]
