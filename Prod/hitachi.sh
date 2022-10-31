@@ -1,5 +1,6 @@
 #!/bin/bash
               sudo su
+              sudo dnf install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
               #yum update -y
               yum install httpd -y
               systemctl start httpd
