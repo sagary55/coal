@@ -1,4 +1,4 @@
-resource "aws_eip" "eip_public_a" {
+/*resource "aws_eip" "eip_public_a" {
   vpc = true
 }
 resource "aws_nat_gateway" "gw_public_a" {
@@ -82,4 +82,4 @@ resource "aws_route_table_association" "rta_subnet_association_privateb" {
   //from_port         = 0
   //protocol          = "-1"
   //security_group_id = "${aws_security_group.sg_hitachi.id}"
-//}
+//}*/
