@@ -1,4 +1,4 @@
-resource "aws_vpc" "hitachi_vpc" {
+/*resource "aws_vpc" "hitachi_vpc" {
   cidr_block           = "${var.cidr_vpc}"
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -92,3 +92,4 @@ resource "aws_route_table_association" "rta_subnet_association_pubb" {
 }
 
 
+*/
