@@ -45,7 +45,10 @@ resource "aws_autoscaling_group" "Hitachi-PROD" {
   #  "subnet-07fa40ac193ba9b05",
   #  "subnet-097d414e4bf4e51e4"
   #]
-  vpc_zone_identifier = ["${aws_subnet.cidr_private_subnet_a.id}"]
+  vpc_zone_identifier  = [
+    "subnet-0386b39bb9417b6c5",
+    "subnet-0acd23e31fb17a460"
+  ]
 
   # Required to redeploy without an outage.
   lifecycle {
@@ -202,7 +205,7 @@ resource "aws_lb_target_group" "Hitachi-PROD-TG" {
   name     = "Hitachi-PROD-TG"
   port     = 80
  protocol = "HTTP"
-  vpc_id   = "${aws_vpc.hitachi_vpc.id}"
+  vpc_id   = "vpc-0a9f11ae4c267aa39"
   health_check {
     interval            = 10
     path                = "/"
@@ -217,7 +220,10 @@ resource "aws_lb" "lb_hitachi" {
   name               = "hitachi-elb-prod"
   internal           = false
   load_balancer_type = "application"
-  subnets            = ["${aws_subnet.cidr_public_subnet_a.id}", "${aws_subnet.cidr_public_subnet_b.id}"]
+  subnets            = [
+    "subnet-0386b39bb9417b6c5",
+    "subnet-0acd23e31fb17a460"
+  ]
   security_groups    = ["${aws_security_group.Hitachi-PROD.id}"]
   enable_deletion_protection = false
   tags = {
