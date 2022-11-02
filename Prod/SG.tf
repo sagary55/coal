@@ -3,7 +3,13 @@ resource "aws_security_group" "Hitachi-PROD" {
   description = "Hitachi-PROD"
   vpc_id      = "vpc-0a9f11ae4c267aa39"
 
-
+ ingress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+	cidr_blocks      = ["0.0.0.0/0"]
+  description      = "internal VPC"
+  }
 
 
   ingress {
