@@ -1,4 +1,4 @@
-resource "aws_eip" "eip_public_a" {
+/*resource "aws_eip" "eip_public_a" {
   vpc = true
 }
 resource "aws_nat_gateway" "gw_public_a" {
@@ -65,7 +65,7 @@ resource "aws_route_table_association" "rta_subnet_association_privateb" {
     //Environment = "${var.environment}"
   //}
 //}
-
+*/
 
 //resource "aws_security_group_rule" "webserver_sg" {
   //type              = "ingress"
