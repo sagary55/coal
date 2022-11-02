@@ -3,7 +3,7 @@ region = "us-east-1"
 }
 resource "aws_launch_configuration" "Hitachi-PROD" {
   #name_prefix = "Hitachi-PROD"
-   name = "Hitachi-PRODLC"
+   name = "Hitachi-PROD-LC"
   image_id = "ami-06640050dc3f556bb" # Amazon Linux 2 AMI (HVM), SSD Volume Type
   instance_type = "t3.small"
   iam_instance_profile = "ssm"
