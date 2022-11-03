@@ -1,35 +1,36 @@
 provider "aws" {
 region = "us-east-1"
 }
-resource "aws_launch_configuration" "Hitachi-PROD" {
-  #name_prefix = "Hitachi-PROD"
-   name = "Hitachi-PRODLC"
-  image_id = "ami-06640050dc3f556bb" # Amazon Linux 2 AMI (HVM), SSD Volume Type
-  instance_type = "t3.small"
-  iam_instance_profile = "ssm"
-  key_name = "coalindia1"
-  #security_groups = ["sg-0f26eebf1b3476c10"]
-  security_groups = [aws_security_group.Hitachi-PROD.id]
-    root_block_device {
-    #device_name = "/dev/xvdb"
-    volume_type = "gp3"
-    volume_size = 10
-	encrypted   = true
-	#kms_key_id  =  "arn:aws:kms:ap-south-1:371348661740:key/918670b8-f7a8-4c71-8ac2-d946da0de843"
-	delete_on_termination = true
+resource "aws_launch_template" "Hitachi-PROD" {
+  name_prefix = "Hitachi-Prod-LC"
+  image_id = "ami-06640050dc3f556bb"
+  iam_instance_profile {
+    name = "ssm"
   }
-   user_data = "${file("hitachi.sh")}"
+  instance_type = "t3.micro"
+  key_name = "coalindia1"
+  vpc_security_group_ids = [aws_security_group.Hitachi-PROD.id]
+  block_device_mappings {
+    device_name = "/dev/sda1"
+
+    ebs {
+      volume_size = 10
+    }
+  }
+  user_data = filebase64("hitachi.sh")
 }
-resource "aws_autoscaling_group" "Hitachi-PROD" {
+resource "aws_autoscaling_group" "Hitachi-Prod" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 1
-  desired_capacity     = 1
-  max_size             = 1
+  min_size             = 2
+  desired_capacity     = 2
+  max_size             = 2
 
   health_check_type    = "EC2"
-  launch_configuration = aws_launch_configuration.Hitachi-PROD.name
-  # target_group_arns = [aws_lb_target_group.Hitachi-PROD-tg.arn]
 
+ launch_template {
+    id      = aws_launch_template.Hitachi-PROD.id
+    version = aws_launch_template.Hitachi-PROD.latest_version
+  }
   enabled_metrics = [
     "GroupMinSize",
     "GroupMaxSize",
