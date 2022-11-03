@@ -19,7 +19,7 @@ resource "aws_launch_template" "Hitachi-PROD" {
   }
   user_data = filebase64("hitachi.sh")
 }
-resource "aws_autoscaling_group" "Hitachi-Prod" {
+resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
   min_size             = 2
   desired_capacity     = 2
