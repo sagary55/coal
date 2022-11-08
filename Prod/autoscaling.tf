@@ -7,7 +7,7 @@ resource "aws_launch_template" "Hitachi-PROD" {
   iam_instance_profile {
     name = "ssm"
   }
-  instance_type = "t3.micro"
+  instance_type = "t3a.micro"
   key_name = "coalindia1"
   vpc_security_group_ids = [aws_security_group.Hitachi-PROD.id]
   block_device_mappings {
