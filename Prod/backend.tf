@@ -1,4 +1,4 @@
-/*terraform {
+terraform {
   backend "s3" {
     bucket = "coalindia-cf"
     #dynamodb_table = "s3-terraform-eks-state-lock"
@@ -7,4 +7,4 @@
     encrypt = true
   }
 }
-*/
+
