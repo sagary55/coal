@@ -7,7 +7,7 @@ resource "aws_launch_template" "Hitachi-PROD" {
   iam_instance_profile {
     name = "ssm"
   }
-  instance_type = "t3a.micro"
+  instance_type = "t3.micro"
   key_name = "coalindia1"
   vpc_security_group_ids = [aws_security_group.Hitachi-PROD.id]
   block_device_mappings {
@@ -21,9 +21,9 @@ resource "aws_launch_template" "Hitachi-PROD" {
 }
 resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 3
-  desired_capacity     = 3
-  max_size             = 4
+  min_size             = 2
+  desired_capacity     = 2
+  max_size             = 2
 
   health_check_type    = "EC2"
 
@@ -204,7 +204,7 @@ resource "aws_cloudwatch_metric_alarm" "Hitachi-PROD-UAT_Memory_alarm_Scale_DOWN
 
 resource "aws_lb_target_group" "Hitachi-PROD-TG" {
   name     = "Hitachi-PROD-TG"
-  port     = 80
+  port     = 8080
  protocol = "HTTP"
   vpc_id   = "vpc-0a9f11ae4c267aa39"
   health_check {
@@ -236,7 +236,7 @@ resource "aws_lb_listener" "IB-API" {
   #listener_arn = "arn:aws:elasticloadbalancing:ap-south-1:476827303802:listener/app/IM-VER-PROD-LB/2687b802eb738bb3/0ce6499695b0b72c"
   #priority     = 15
   load_balancer_arn = "${aws_lb.lb_hitachi.arn}"
-  port = "8080"
+  port = "80"
   protocol = "HTTP"
   default_action {
     type             = "forward"
