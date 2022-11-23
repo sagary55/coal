@@ -95,10 +95,6 @@ tags = [
     "propagate_at_launch" = true
 	},
     ]
-  lifecycle {
-    create_before_destroy = true
-  }
-
 }
 
 resource "aws_autoscaling_policy" "Hitachi-PROD-UAT_Memory_Scale_UP" {
