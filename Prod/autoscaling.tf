@@ -24,8 +24,8 @@ resource "aws_launch_template" "Hitachi-PROD" {
 }
 resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 3
-  desired_capacity     = 3
+  min_size             = 4
+  desired_capacity     = 4
   max_size             = 6
 
   health_check_type    = "EC2"
