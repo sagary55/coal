@@ -215,6 +215,8 @@ resource "aws_lb_target_group" "Hitachi-PROD-TG" {
     healthy_threshold   = 5
     unhealthy_threshold = 2
   }
+ lifecycle{
+	 create_before_destroy = true
 }
 
 resource "aws_lb" "lb_hitachi" {
