@@ -7,7 +7,7 @@ resource "aws_launch_template" "Hitachi-PROD" {
   iam_instance_profile {
     name = "ssm"
   }
-  instance_type = "t3a.micro"
+  instance_type = "t3.micro"
   key_name = "coalindia1"
   vpc_security_group_ids = [aws_security_group.Hitachi-PROD.id]
   block_device_mappings {
@@ -21,8 +21,8 @@ resource "aws_launch_template" "Hitachi-PROD" {
 }
 resource "aws_autoscaling_group" "Hitachi-PROD" {
   name = "Hitachi-PROD-ASG"
-  min_size             = 4
-  desired_capacity     = 4
+  min_size             = 2
+  desired_capacity     = 2
   max_size             = 6
 
   health_check_type    = "EC2"
